@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { X, Edit2, Play, Pause, SkipForward, RotateCcw, Check, Maximize2 } from "lucide-react"
+import { X, Edit2, Play, Pause, SkipForward, RotateCcw, Check } from "lucide-react"
 
 interface Event {
   id: string;
@@ -21,6 +21,9 @@ const createEvent = (name: string, hours: number, minutes: number, seconds: numb
   minutes,
   seconds
 });
+
+// Add these type definitions at the top of the file
+type Interval = ReturnType<typeof setInterval>;
 
 export default function ProductionTimer() {
   const [events, setEvents] = useState<Event[]>([])
@@ -47,7 +50,7 @@ export default function ProductionTimer() {
   }, [events]);
 
   useEffect(() => {
-    let interval;
+    let interval: Interval;
     if (isTimerRunning && events.length > 0) {
       interval = setInterval(() => {
         setTimeRemaining((prevTime) => {
@@ -152,14 +155,14 @@ export default function ProductionTimer() {
     setIsBlinking(false)
   }
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
-  const startEditing = (event) => {
+  const startEditing = (event: Event) => {
     setEditingEvent({ ...event })
   }
 
